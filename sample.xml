@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<package name="My First Package" description="This is the first package I wrote">
+		<class name="FPOne" description="The first class in package one">
+		
+		</class>
+	</package>
+
+	<package name="My Second Package" description="This is the second package I wrote">
+		
+	</package>
+
+	<class name="ClassA" description="Class A">
+	</class>
+
+	<class name="ClassB" description="Class B">
+	</class>
+</project>
