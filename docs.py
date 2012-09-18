@@ -94,6 +94,8 @@ class ModuleFactory:
 
 			if elm.tagName == "package":
 				return PackageModule(elm)
+			elif elm.tagName == "class":
+				return ClassModule(elm)
 			else:
 				print "error: unknown tag name -- %s" % elm.tagName
 		
@@ -115,6 +117,26 @@ class PackageModule(Module):
 		s += '\t<div class="packagedescription">%s</div>\n' % (self.description)
 		s += '</div>'
 
+		return s
+
+
+
+class ClassModule(Module):
+
+	__slots__ = ("name", "description")
+
+	def __init__(self, elm, level=0):
+		"""create a new ClassModule"""
+		Module.__init__(self, elm, level)
+		self.name = elm.getAttribute("name")
+		self.description = elm.getAttribute("description") or "no description"
+
+
+	def getHTML(self):
+		s = '<div class="class level-%d">\n' % (self.level)
+		s += '\t<h2 class="classname">%s</h2>\n' % (self.name)
+		s += '\t<div class="classdescription">%s</div>\n' % (self.description)
+		s += '</div>'
 		return s
 
 
@@ -143,8 +165,30 @@ class TOCGenerator:
 		# head
 		html += "<head>\n"
 		html += "<title>Table Of Contents</title>\n"
-		html += '<link rel="stylesheet" type="text/css" href="%s"\n'  % Config.stylesheet
+		html += '<link rel="stylesheet" type="text/css" href="%s" />\n'  % Config.stylesheet
 		html += "</head>\n"
+
+
+		packageToc = ''
+		classToc = ''
+		functionToc = ''
+
+		for m in modules:
+			if isinstance(m, PackageModule):
+				packageToc += m.getHTML()
+			if isinstance(m, ClassModule):
+				classToc += m.getHTML()
+
+
+		html += '<h1>Packages</h1>\n'
+		html += packageToc
+
+		html += '<h1>Classes</h1>\n'
+		html += classToc
+
+		html += '<h1>Functions</h1>\n'
+		
+
 
 		html += "</html>\n"
 
